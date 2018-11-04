@@ -60,6 +60,7 @@ def process_one(entry):
     scraperwiki.sqlite.save(
         unique_keys=["source", "text", "date", "location"],
         data={"source": source, "text": text, "date": date, "location": location},
+        table_name="data"
     )
 
 
