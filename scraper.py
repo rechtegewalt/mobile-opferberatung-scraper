@@ -1,32 +1,10 @@
-# This is a template for a Python scraper on morph.io (https://morph.io)
-# including some code snippets below that you should find helpful
-
-import scraperwiki
-import lxml.html
 import datetime
+import glob
 import re
 import shutil
-import glob
 
-#
-# # Read in a page
-# html = scraperwiki.scrape("http://foo.com")
-#
-# # Find something on the page using css selectors
-# root = lxml.html.fromstring(html)
-# root.cssselect("div[align='left']")
-# #
-# # # Write out to the sqlite database using scraperwiki library
-# scraperwiki.sqlite.save(unique_keys=['name'], data={"name": "susan", "occupation": "software developer"})
-#
-# # An arbitrary query against the database
-# scraperwiki.sql.select("* from data where 'name'='peter'")
-
-# You don't have to do things with the ScraperWiki and lxml libraries.
-# You can use whatever libraries you want: https://morph.io/documentation/python
-# All that matters is that your final data is written to an SQLite database
-# called "data.sqlite" in the current working directory which has at least a table
-# called "data".
+import lxml.html
+import scraperwiki
 
 
 def process_one(entry):
@@ -52,6 +30,7 @@ def process_one(entry):
     # just location
     raw_location = " ".join(head_split[1 : len(head_split)])
 
+    # TODO: What is about landkreise?
     # but sometimes with 'Landkreisen'
     # we want to clean the data and remove them
     location = fix_location.sub("", raw_location)
@@ -62,7 +41,7 @@ def process_one(entry):
     scraperwiki.sqlite.save(
         unique_keys=["source", "text", "date", "location"],
         data={"source": source, "text": text, "date": date, "location": location},
-        table_name="data"
+        table_name="data" # broken right now
     )
 
 
@@ -84,4 +63,5 @@ for i in indices:
     for entry in doc.xpath("//h5"):
         process_one(entry)
 
+# This is a hotfix. Right now, the custom naming of the table is broken.
 shutil.move(glob.glob('./*.sqlite')[0], "data.sqlite")
