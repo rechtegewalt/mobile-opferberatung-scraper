@@ -40,7 +40,6 @@ def process_one(entry):
     raw_text = ""
     for part in entry.xpath("./following-sibling::div[1]/p/text()"):
         raw_text += " " + part
-    print(raw_text)
     text = re.sub(r"<!--.*-->", "", raw_text).strip()
 
     head_split = head.split()
