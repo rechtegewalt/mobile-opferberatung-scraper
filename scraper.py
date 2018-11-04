@@ -5,6 +5,8 @@ import scraperwiki
 import lxml.html
 import datetime
 import re
+import shutil
+import glob
 
 #
 # # Read in a page
@@ -81,3 +83,5 @@ for i in indices:
 
     for entry in doc.xpath("//h5"):
         process_one(entry)
+
+shutil.move(glob.glob('./*.sqlite')[0], "data.sqlite")
