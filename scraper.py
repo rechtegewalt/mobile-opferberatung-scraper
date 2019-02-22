@@ -81,6 +81,10 @@ for i in indices:
 
     url = base_url % i
 
+    # special case for 2019
+    if i == 2019:
+        url = url.replace("chronik2019", "chronik-2019")
+
     print("Sending Requests:")
     print(url)
 
