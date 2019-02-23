@@ -1,11 +1,14 @@
 import datetime
 import glob
 import re
-import shutil
 import sys
+import os
 from urllib.parse import quote
 
 import lxml.html
+
+os.environ["SCRAPERWIKI_DATABASE_NAME"] = "sqlite:///data.sqlite"
+
 import scraperwiki
 
 # simple enviroment
@@ -144,6 +147,3 @@ for i in indices:
 
     for entry in doc.xpath("//h5"):
         process_one(entry, url)
-
-# This is a hotfix. Right now, the custom naming of the table is broken.
-shutil.move(glob.glob("./*.sqlite")[0], "data.sqlite")
