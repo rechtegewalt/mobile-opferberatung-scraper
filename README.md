@@ -3,7 +3,7 @@
 Scraping right-wing incidents in Sachsen-Anhalt, Germany as monitored by the NGO [Mobile Opferberatung](https://www.mobile-opferberatung.de/).
 
 -   Website: http://www.mobile-opferberatung.de/monitoring/chronik2018/
--   Data: https://morph.io/jfilter/mobile-opferberatung-scraper
+-   Data: https://morph.io/dmedak/mobile-opferberatung-scraper
 
 ## Usage
 

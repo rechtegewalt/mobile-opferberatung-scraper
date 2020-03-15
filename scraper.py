@@ -81,9 +81,9 @@ def extract_location(location):
     # sometimes new white spaces need to be stripped again
     location = location.strip()
     if len(county) == 0:
-        location_final = ", ".join([location, "Sachsen-Anhalt", "Germany"])
+        location_final = ", ".join([location, "Sachsen-Anhalt", "Deutschland"])
     else:
-        location_final = ", ".join([location, county, "Sachsen-Anhalt", "Germany"])
+        location_final = ", ".join([location, county, "Sachsen-Anhalt", "Deutschland"])
     return location_final
 
 
@@ -142,7 +142,11 @@ for i in indices:
     print("Sending Requests:")
     print(url)
 
-    html = scraperwiki.scrape(url)
+    try:
+        html = scraperwiki.scrape(url)
+    except Exception as e:
+        print('some error,', e)
+
     doc = lxml.html.fromstring(html)
 
     for entry in doc.xpath("//h5"):
