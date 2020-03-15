@@ -17,7 +17,7 @@ debug = len(sys.argv) > 1
 # 11.02.2005
 def extract_data_format_1(source, sep_source):
     source_date_string = source[sep_source + 1 :].strip()
-    source_date = datetime.datetime.strptime(source_date_string, "%d.%m.%Y").isoformat()
+    source_date = datetime.datetime.strptime(source_date_string, "%d.%m.%Y")
     source_name = source[:sep_source]
     return source_name, source_date
 
@@ -25,7 +25,7 @@ def extract_data_format_1(source, sep_source):
 # 11.02.05
 def extract_data_format_2(source, sep_source):
     source_date_string = source[sep_source + 1 :].strip()
-    source_date = datetime.datetime.strptime(source_date_string, "%d.%m.%y").isoformat()
+    source_date = datetime.datetime.strptime(source_date_string, "%d.%m.%y")
     source_name = source[:sep_source]
     return source_name, source_date
 
@@ -40,7 +40,7 @@ def extract_sources(source_list):
     sources = []
     for source in source_list:
         source_name = source
-        source_date = ""
+        source_date = None 
         if "," in source:
             sep_source = source.rindex(",")
             done = False
@@ -101,11 +101,11 @@ def process_one(entry, url):
 
     head_split = head.split()
     raw_date = head_split[0]
-    date = datetime.datetime.strptime(raw_date, "%d.%m.%Y").isoformat()
+    date = datetime.datetime.strptime(raw_date, "%d.%m.%Y")
     # just location
     raw_location = " ".join(head_split[1:])
     location = extract_location(raw_location)
-    uri = url + "#" + quote(date + "-" + location)
+    uri = url + "#" + quote(date.isoformat() + "-" + location)
 
     scraperwiki.sqlite.save(
         unique_keys=["uri"],
