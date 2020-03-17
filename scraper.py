@@ -4,6 +4,7 @@ import re
 import sys
 import os
 from urllib.parse import quote
+from hashlib import md5
 
 import lxml.html
 
@@ -40,7 +41,7 @@ def extract_sources(source_list):
     sources = []
     for source in source_list:
         source_name = source
-        source_date = None 
+        source_date = None
         if "," in source:
             sep_source = source.rindex(",")
             done = False
@@ -105,25 +106,26 @@ def process_one(entry, url):
     # just location
     raw_location = " ".join(head_split[1:])
     location = extract_location(raw_location)
-    uri = url + "#" + quote(date.isoformat() + "-" + location)
+
+    identifier = md5((url + date.isoformat() + location + text).encode()).hexdigest()
 
     scraperwiki.sqlite.save(
-        unique_keys=["uri"],
-        data={"description": text, "startDate": date, "iso3166_2": "DE-ST", "uri": uri},
-        table_name="data",
+        unique_keys=["identifier"],
+        data={"description": text, "date": date, "iso3166_2": "DE-ST", "url": url, "identifier": identifier, "aggregator": "Mobile Opferberatung (Sachsen-Anhalt)"},
+        table_name="incidents",
     )
 
     scraperwiki.sqlite.save(
-        unique_keys=["reportURI"],
-        data={"subdivisions": location, "reportURI": uri},
-        table_name="location",
+        unique_keys=["identifier"],
+        data={"subdivisions": location, "identifier": identifier},
+        table_name="locations",
     )
 
     for s in sources:
         scraperwiki.sqlite.save(
-            unique_keys=["reportURI"],
-            data={"publishedDate": s["date"], "name": s["name"], "reportURI": uri},
-            table_name="source",
+            unique_keys=["identifier"],
+            data={"date": s["date"], "name": s["name"], "identifier": identifier},
+            table_name="sources",
         )
 
 
