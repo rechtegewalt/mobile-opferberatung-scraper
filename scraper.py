@@ -88,14 +88,31 @@ def extract_location(location):
     return location_final
 
 
-def process_one(entry, url):
-    source_list = entry.xpath(".//h5//text()")
+def legacy_parse(entry):
+    source_list = entry.xpath("./text()")
     sources = extract_sources(source_list)
-    head = entry.xpath(".//h1//text()")[0]
 
+    head = entry.xpath("./following-sibling::h1[1]/text()")[0]
+
+    # add all parts to one large string
     raw_text = ""
-    for part in entry.xpath(".//p/text()"):
+    for part in entry.xpath("./following-sibling::div[1]/p/text()"):
         raw_text += " " + part
+    return sources, head, raw_text
+
+
+def process_one(entry, url, legacy=False):
+    if legacy:
+        sources, head, raw_text = legacy_parse(entry)
+    else:
+        source_list = entry.xpath(".//h5//text()")
+        sources = extract_sources(source_list)
+        print(entry.xpath(".//text()"))
+        head = entry.xpath(".//h1//text()")[0]
+
+        raw_text = ""
+        for part in entry.xpath(".//p/text()"):
+            raw_text += " " + part
     text = re.sub(r"<!--.*-->", "", raw_text).strip()
 
     head_split = head.split()
@@ -131,7 +148,7 @@ def process_one(entry, url):
 
 base_url = "http://www.mobile-opferberatung.de/monitoring/chronik%s/"
 
-indices = range(2003, datetime.datetime.now().year + 1)
+indices = range(2017, datetime.datetime.now().year + 1)
 
 for i in indices:
 
@@ -151,7 +168,12 @@ for i in indices:
 
     doc = lxml.html.fromstring(html)
 
-    for entry in doc.xpath(
-        "//div[class='entry-content']//div[contains(@class, 'et_pb_row')]"
-    ):
-        process_one(entry, url)
+    # only new cases are in the new format
+    if i >= 2017:
+        for entry in doc.xpath('//div[@class="entry-content"]')[0].xpath(
+            './/div[contains(@class, "et_pb_with_border")]'
+        ):
+            process_one(entry, url)
+    else:
+        for entry in doc.xpath("//h5"):
+            process_one(entry, url, legacy=True)
