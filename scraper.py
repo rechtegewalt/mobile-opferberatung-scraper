@@ -109,14 +109,16 @@ def process_one(entry, url):
 
     scraperwiki.sqlite.save(
         unique_keys=["identifier"],
-        data={"description": text, "date": date, "iso3166_2": "DE-ST", "url": url, "identifier": identifier, "aggregator": "Mobile Opferberatung (Sachsen-Anhalt)"},
+        data={
+            "description": text,
+            "date": date,
+            "iso3166_2": "DE-ST",
+            "url": url,
+            "identifier": identifier,
+            "subdivisions": location,
+            "aggregator": "Mobile Opferberatung (Sachsen-Anhalt)",
+        },
         table_name="incidents",
-    )
-
-    scraperwiki.sqlite.save(
-        unique_keys=["identifier"],
-        data={"subdivisions": location, "identifier": identifier},
-        table_name="locations",
     )
 
     for s in sources:
