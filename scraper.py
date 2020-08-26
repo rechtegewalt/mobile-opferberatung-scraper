@@ -89,14 +89,12 @@ def extract_location(location):
 
 
 def process_one(entry, url):
-    source_list = entry.xpath("./text()")
+    source_list = entry.xpath(".//h5//text()")
     sources = extract_sources(source_list)
+    head = entry.xpath(".//h1//text()")[0]
 
-    head = entry.xpath("./following-sibling::h1[1]/text()")[0]
-
-    # add all parts to one large string
     raw_text = ""
-    for part in entry.xpath("./following-sibling::div[1]/p/text()"):
+    for part in entry.xpath(".//p/text()"):
         raw_text += " " + part
     text = re.sub(r"<!--.*-->", "", raw_text).strip()
 
@@ -137,9 +135,9 @@ for i in indices:
 
     url = base_url % i
 
-    # special case for 2019
-    if i == 2019:
-        url = url.replace("chronik2019", "chronik-2019")
+    # special case for 2019+
+    if i >= 2019:
+        url = url.replace(f"{i}", f"-{i}")
 
     print("Sending Requests:")
     print(url)
@@ -147,9 +145,11 @@ for i in indices:
     try:
         html = scraperwiki.scrape(url)
     except Exception as e:
-        print('some error,', e)
+        print("some error,", e)
 
     doc = lxml.html.fromstring(html)
 
-    for entry in doc.xpath("//h5"):
+    for entry in doc.xpath(
+        "//div[class='entry-content']//div[contains(@class, 'et_pb_row')]"
+    ):
         process_one(entry, url)
