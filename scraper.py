@@ -1,9 +1,7 @@
 import datetime
-import glob
 import re
 import sys
 import os
-from urllib.parse import quote
 from hashlib import md5
 
 import lxml.html
@@ -107,7 +105,6 @@ def process_one(entry, url, legacy=False):
     else:
         source_list = entry.xpath(".//h5//text()")
         sources = extract_sources(source_list)
-        print(entry.xpath(".//text()"))
         head = entry.xpath(".//h1//text()")[0]
 
         raw_text = ""
@@ -148,7 +145,7 @@ def process_one(entry, url, legacy=False):
 
 base_url = "http://www.mobile-opferberatung.de/monitoring/chronik%s/"
 
-indices = range(2017, datetime.datetime.now().year + 1)
+indices = range(2003, datetime.datetime.now().year + 1)
 
 for i in indices:
 
