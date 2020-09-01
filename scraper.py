@@ -122,7 +122,7 @@ def process_one(entry, url, legacy=False):
     identifier = md5((url + date.isoformat() + location + text).encode()).hexdigest()
 
     scraperwiki.sqlite.save(
-        unique_keys=["identifier"],
+        unique_keys=["rg_id"],
         data={
             "description": text,
             "date": date,
@@ -137,8 +137,8 @@ def process_one(entry, url, legacy=False):
 
     for s in sources:
         scraperwiki.sqlite.save(
-            unique_keys=["identifier"],
-            data={"date": s["date"], "name": s["name"], "identifier": identifier},
+            unique_keys=["rg_id"],
+            data={"date": s["date"], "name": s["name"], "rg_id": identifier},
             table_name="sources",
         )
 
