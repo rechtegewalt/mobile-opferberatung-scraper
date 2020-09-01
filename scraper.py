@@ -128,7 +128,7 @@ def process_one(entry, url, legacy=False):
             "date": date,
             "iso3166_2": "DE-ST",
             "url": url,
-            "identifier": identifier,
+            "rg_id": identifier,
             "subdivisions": location,
             "aggregator": "Mobile Opferberatung (Sachsen-Anhalt)",
         },
