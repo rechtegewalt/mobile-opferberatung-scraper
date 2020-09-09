@@ -68,7 +68,13 @@ def extract_location(location):
     county = re.findall(r"\(.*\)", location)
     if len(county) > 0:
         county = county[0]
-        county = county.replace("(", "").replace(")", "")
+        county = (
+            county.replace("(", "")
+            .replace(")", "")
+            .replace("Landkreis", "")
+            .replace("LK ", "")
+            .strip()
+        )
 
         # special case for Halle Saale
         if "Saale" in county and "Halle" in location:
@@ -80,9 +86,10 @@ def extract_location(location):
     # sometimes new white spaces need to be stripped again
     location = location.strip()
     if len(county) == 0:
-        location_final = ", ".join([location])
+        location_final = str([location])
     else:
-        location_final = ", ".join([location, ["Landkreis", county]])
+        location_final = str([location, ["Landkreis", county]])
+    print(location_final)
     return location_final
 
 
