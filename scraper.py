@@ -136,7 +136,9 @@ def process_one(entry, url, legacy=False):
             "url": url,
             "rg_id": identifier,
             "subdivisions": location,
-            "aggregator": "Mobile Opferberatung",
+            "chronicler_name": "Mobile Opferberatung (Sachsen-Anhalt)",
+            "chronicler_url": "https://www.mobile-opferberatung.de/",
+            "chronicle_source": "https://www.mobile-opferberatung.de/monitoring/chronik-2020/",
         },
         table_name="incidents",
     )
