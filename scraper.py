@@ -71,7 +71,7 @@ def extract_location(location):
         county = county.replace("(", "").replace(")", "")
 
         # special case for Halle Saale
-        if county == "Saale":
+        if "Saale" in county and "Halle" in location:
             county = []
         else:
             # remove landkreis from location
@@ -80,9 +80,9 @@ def extract_location(location):
     # sometimes new white spaces need to be stripped again
     location = location.strip()
     if len(county) == 0:
-        location_final = ", ".join([location, "Sachsen-Anhalt", "Deutschland"])
+        location_final = ", ".join([location])
     else:
-        location_final = ", ".join([location, county, "Sachsen-Anhalt", "Deutschland"])
+        location_final = ", ".join([location, ["Landkreis", county]])
     return location_final
 
 
@@ -130,7 +130,7 @@ def process_one(entry, url, legacy=False):
             "url": url,
             "rg_id": identifier,
             "subdivisions": location,
-            "aggregator": "Mobile Opferberatung (Sachsen-Anhalt)",
+            "aggregator": "Mobile Opferberatung",
         },
         table_name="incidents",
     )
