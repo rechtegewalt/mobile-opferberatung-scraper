@@ -89,7 +89,6 @@ def extract_location(location):
         location_final = str([location])
     else:
         location_final = str([location, ["Landkreis", county]])
-    print(location_final)
     return location_final
 
 
