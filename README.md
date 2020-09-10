@@ -1,9 +1,9 @@
 # Mobile Opferberatung Scraper
 
-Scraping right-wing incidents in Sachsen-Anhalt, Germany as monitored by the NGO [Mobile Opferberatung](https://www.mobile-opferberatung.de/).
+Scraping right-wing incidents in Saxony-Anhalt (*Sachsen-Anhalt*), Germany as monitored by the NGO [Mobile Opferberatung](https://www.mobile-opferberatung.de/).
 
--   Website: http://www.mobile-opferberatung.de/monitoring/chronik2018/
--   Data: https://morph.io/dmedak/mobile-opferberatung-scraper
+-   Website: <http://www.mobile-opferberatung.de/monitoring/chronik2018/>
+-   Data: <https://morph.io/dmedak/mobile-opferberatung-scraper>
 
 ## Usage
 
@@ -21,8 +21,8 @@ For Morph:
 
 ## Morph
 
-This is a scraper that runs on [Morph](https://morph.io). To get started [see the documentation](https://morph.io/documentation)
+This is scraper runs on [morph.io](https://morph.io). To get started [see the documentation](https://morph.io/documentation).
 
 ## License
 
-MIT.
+MIT
