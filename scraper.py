@@ -1,7 +1,6 @@
 import datetime
-import re
-import sys
 import os
+import re
 from hashlib import md5
 
 import lxml.html
@@ -10,8 +9,7 @@ os.environ["SCRAPERWIKI_DATABASE_NAME"] = "sqlite:///data.sqlite"
 
 import scraperwiki
 
-# simple enviroment
-debug = len(sys.argv) > 1
+DEBUG = False
 
 # 11.02.2005
 def extract_data_format_1(source, sep_source):
@@ -48,14 +46,14 @@ def extract_sources(source_list):
                 source_name, source_date = extract_data_format_1(source, sep_source)
                 done = True
             except BaseException as e:
-                if debug:
+                if DEBUG:
                     print(source)
                     print(str(e))
             if not done:
                 try:
                     source_name, source_date = extract_data_format_2(source, sep_source)
                 except BaseException as e:
-                    if debug:
+                    if DEBUG:
                         print(source)
                         print(str(e))
         sources.append({"name": source_name, "date": source_date})
@@ -132,13 +130,10 @@ def process_one(entry, url, legacy=False):
         data={
             "description": text,
             "date": date,
-            "iso3166_2": "DE-ST",
             "url": url,
             "rg_id": identifier,
             "subdivisions": location,
-            "chronicler_name": "Mobile Opferberatung (Sachsen-Anhalt)",
-            "chronicler_url": "https://www.mobile-opferberatung.de/",
-            "chronicle_source": "https://www.mobile-opferberatung.de/monitoring/chronik-2020/",
+            "chronicler_name": "Mobile Opferberatung",
         },
         table_name="incidents",
     )
@@ -167,7 +162,6 @@ for i in indices:
     if i >= 2019:
         url = url.replace(f"{i}", f"-{i}")
 
-    print("Sending Requests:")
     print(url)
 
     try:
@@ -186,3 +180,20 @@ for i in indices:
     else:
         for entry in doc.xpath("//h5"):
             process_one(entry, url, legacy=True)
+
+# save meta data
+
+scraperwiki.sqlite.save(
+    unique_keys=["chronicler_name"],
+    data={
+        "iso3166_1": "DE",
+        "iso3166_2": "DE-ST",
+        "chronicler_name": "Mobile Opferberatung",
+        "chronicler_description": "Die Mobile Opferberatung in Trägerschaft von Miteinander e.V. unterstützt seit 2001 professionell und parteilich Betroffene rechter, rassistischer, antiromaistischer, lgbtiq-feindlicher, sozialdarwinistischer und antisemitischer Gewalt, deren Freundinnen, Angehörige sowie Zeug*innen in Sachsen-Anhalt.",
+        "chronicler_url": "https://www.mobile-opferberatung.de/",
+        "source": "https://www.mobile-opferberatung.de/monitoring/chronik-2020/",
+    },
+    table_name="chronicle",
+)
+
+scraperwiki.sqlite.commit_transactions()
