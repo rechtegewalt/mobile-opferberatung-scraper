@@ -191,7 +191,7 @@ scraperwiki.sqlite.save(
         "chronicler_name": "Mobile Opferberatung",
         "chronicler_description": "Die Mobile Opferberatung in Trägerschaft von Miteinander e.V. unterstützt seit 2001 professionell und parteilich Betroffene rechter, rassistischer, antiromaistischer, lgbtiq-feindlicher, sozialdarwinistischer und antisemitischer Gewalt, deren Freundinnen, Angehörige sowie Zeug*innen in Sachsen-Anhalt.",
         "chronicler_url": "https://www.mobile-opferberatung.de/",
-        "source": "https://www.mobile-opferberatung.de/monitoring/chronik-2020/",
+        "chronicle_source": "https://www.mobile-opferberatung.de/monitoring/chronik-2020/",
     },
     table_name="chronicle",
 )
