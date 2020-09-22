@@ -84,10 +84,8 @@ def extract_location(location):
     # sometimes new white spaces need to be stripped again
     location = location.strip()
     if len(county) == 0:
-        location_final = str([location])
-    else:
-        location_final = str([location, ["Landkreis", county]])
-    return location_final
+        return location, None
+    return location, county
 
 
 def legacy_parse(entry):
@@ -121,9 +119,9 @@ def process_one(entry, url, legacy=False):
     date = datetime.datetime.strptime(raw_date, "%d.%m.%Y")
     # just location
     raw_location = " ".join(head_split[1:])
-    location = extract_location(raw_location)
+    city, county = extract_location(raw_location)
 
-    identifier = md5((url + date.isoformat() + location + text).encode()).hexdigest()
+    identifier = md5((url + date.isoformat() + city + text).encode()).hexdigest()
 
     scraperwiki.sqlite.save(
         unique_keys=["rg_id"],
@@ -132,7 +130,8 @@ def process_one(entry, url, legacy=False):
             "date": date,
             "url": url,
             "rg_id": identifier,
-            "subdivisions": location,
+            "city": city,
+            "county": county,
             "chronicler_name": "Mobile Opferberatung",
         },
         table_name="incidents",
