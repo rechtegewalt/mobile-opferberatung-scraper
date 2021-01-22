@@ -121,7 +121,7 @@ def process_one(entry, url, legacy=False):
     raw_location = " ".join(head_split[1:])
     city, county = extract_location(raw_location)
 
-    identifier = md5((url + date.isoformat() + city + text).encode()).hexdigest()
+    identifier = 'mobile-opferberatung-' + md5((url + date.isoformat() + city + text).encode()).hexdigest()
 
     scraperwiki.sqlite.save(
         unique_keys=["rg_id"],
