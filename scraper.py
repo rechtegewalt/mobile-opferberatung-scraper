@@ -133,7 +133,10 @@ def process_one(entry, url, mode):
         print(sources)
         print(date, text, city, county)
 
-    identifier = 'mobile-opferberatung-' + md5((url + date.isoformat() + city + text).encode()).hexdigest()
+    # Initially had to use the HTTP version, but not using the HTTPS version. To re-use the old generated rg_ids,
+    # use http for the id.
+    url_fixed = url.replace('https://', 'http://')
+    identifier = 'mobile-opferberatung-' + md5((url_fixed + date.isoformat() + city + text).encode()).hexdigest()
 
     scraperwiki.sqlite.save(
         unique_keys=["rg_id"],
