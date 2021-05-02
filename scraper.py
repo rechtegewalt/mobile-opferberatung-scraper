@@ -101,13 +101,21 @@ def legacy_parse(entry):
     return sources, head, raw_text
 
 
-def process_one(entry, url, legacy=False):
-    if legacy:
+def process_one(entry, url, mode):
+    if mode == 'legacy':
         sources, head, raw_text = legacy_parse(entry)
     else:
-        source_list = entry.xpath(".//h5//text()")
+        if mode == '17+':
+            head_ele = 'h1'
+            source_ele = 'h5'
+        else:
+            head_ele = 'h2'
+            source_ele = 'strong'
+
+        source_list = entry.xpath(f".//{source_ele}//text()")
         sources = extract_sources(source_list)
-        head = entry.xpath(".//h1//text()")[0]
+
+        head = entry.xpath(f".//{head_ele}//text()")[0]
 
         raw_text = ""
         for part in entry.xpath(".//p/text()"):
@@ -120,6 +128,10 @@ def process_one(entry, url, legacy=False):
     # just location
     raw_location = " ".join(head_split[1:])
     city, county = extract_location(raw_location)
+
+    if DEBUG:
+        print(sources)
+        print(date, text, city, county)
 
     identifier = 'mobile-opferberatung-' + md5((url + date.isoformat() + city + text).encode()).hexdigest()
 
@@ -149,7 +161,7 @@ def process_one(entry, url, legacy=False):
     scraperwiki.sqlite.commit_transactions()
 
 
-base_url = "http://www.mobile-opferberatung.de/monitoring/chronik%s/"
+base_url = "https://www.mobile-opferberatung.de/monitoring/chronik%s/"
 
 indices = range(2003, datetime.datetime.now().year + 1)
 
@@ -171,14 +183,19 @@ for i in indices:
     doc = lxml.html.fromstring(html)
 
     # only new cases are in the new format
-    if i >= 2017:
+    if i >= 2020:
+        for entry in doc.xpath('//div[@class="entry-content"]')[0].xpath(
+            './/article'
+        ):
+            process_one(entry, url, mode='20+')
+    elif i >= 2017:
         for entry in doc.xpath('//div[@class="entry-content"]')[0].xpath(
             './/div[contains(@class, "et_pb_with_border")]'
         ):
-            process_one(entry, url)
+            process_one(entry, url, mode='17+')
     else:
         for entry in doc.xpath("//h5"):
-            process_one(entry, url, legacy=True)
+            process_one(entry, url, mode='legacy')
 
 # save meta data
 
