@@ -1,19 +1,19 @@
 -i https://pypi.org/simple/
-alembic==1.5.8
-certifi==2020.12.5
+alembic==1.6.5
+certifi==2021.5.30
 chardet==4.0.0
-greenlet==1.0.0 ; python_version >= '3'
+greenlet==1.1.0 ; python_version >= '3'
 idna==2.10
-importlib-metadata==4.0.1 ; python_version < '3.8'
+importlib-metadata==4.4.0 ; python_version < '3.8'
 lxml==4.6.3
 mako==1.1.4
-markupsafe==2.0.0rc2
+markupsafe==2.0.1
 python-dateutil==2.8.1
 python-editor==1.0.4
 requests==2.25.1
 scraperwiki==0.5.1
-six==1.15.0
-sqlalchemy==1.4.12
+six==1.16.0
+sqlalchemy==1.4.17
 typing-extensions==3.10.0.0 ; python_version < '3.8'
-urllib3==1.26.4
+urllib3==1.26.5
 zipp==3.4.1
